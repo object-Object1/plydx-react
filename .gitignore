@@ -1,0 +1,4 @@
+/playdex-server/node_modules
+/playdex-server/.env
+/playdex_frontend/node_modules
+.vscode/*
