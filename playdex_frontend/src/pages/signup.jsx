@@ -43,7 +43,7 @@ function userRegister(){
 		// })
 		axios({
 			method: "POST",
-			url: "http://localhost:3037/u/register/",
+			url: `${import.meta.env.VITE_BACKEND_URL}/u/register/`,
 			params: {
 				username: defaultUserName(email),
 				email: email,

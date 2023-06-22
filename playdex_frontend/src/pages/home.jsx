@@ -14,6 +14,8 @@ import axios from "axios"
 
 function Home(){
 
+	console.log("im from home")
+
 	let [isOpen, setIsOpen] = useState(false)
 
 	const defaultOptions = {
@@ -39,27 +41,50 @@ function Home(){
 	const [isFetched, setIsFetched] = useState(false)
 	const navigate = useNavigate();
 
+	function getCookie(name) {
+	  const cookies = document.cookie.split(';');
+	  for (let i = 0; i < cookies.length; i++) {
+	    const cookie = cookies[i].trim();
+	    if (cookie.startsWith(name + '=')) {
+	      return cookie.substring(name.length + 1);
+	    }
+	  }
+	  return null;
+	}
+
+
+
+
 
 	useEffect(() => {
+		console.log("cookie", getCookie('jwt'))
+		console.log("this executes", import.meta.env.VITE_BACKEND_URL)
+		if(getCookie("jwt") == null){		
+			navigate('/user/login')
+		}
+
 		axios({
 			method: "GET",
-			url: "http://localhost:3037",
+			url: `${import.meta.env.VITE_BACKEND_URL}`,
 			withCredentials: true
 		})
 
 		.then(res => {
 			setData(res.data.user)
 			setVideosList(res.data.videos)
+			console.log("server response:", res)
 			const videos = res.data.videos
 			if(res.data.user){
 				setLoggedIn(!loggedIn)
 			}
 		})
 		.then(() => {
+			console.log("Hello this executed")
 			setIsFetched(!isFetched)
 		})
 
 		.catch(err => console.log('error potential causes: a Proxy/VPN or Ip restriction',err.message))
+
 	}, [])
 
 
@@ -80,7 +105,7 @@ function Home(){
 
 		axios({
 			method: "POST",
-			url: "http://localhost:3037/lit",
+			url: `${import.meta.env.VITE_BACKEND_URL}/lit`,
 			data:{
 				user:userData,
 				videoId: id
@@ -114,7 +139,7 @@ function Home(){
 
 					<button>{FlameActive}</button>
 					<div className="sm:mx-20 mx-0 my-8">
-					  <h1 className="text-5xl font-bold mx-2 xl:-translate-x-12">Top Gameplays</h1>
+					  <h1 className="text-5xl font-bold mx-2 xl:-translate-x-12">Top Clips</h1>
 					</div>
 					<div className="flex sm:justify-evenly justify-center items-center xl:justify-start xl:mx-10 mx-0 sm:space-x-11 sm:space-y-0 space-y-3 flex-wrap">
 					  {videosList.map((video) => {
@@ -209,17 +234,17 @@ function Home(){
 						                <div className="mt-2">
 						                  <ul className="flex space-x-3 justify-evenly items-center">
 						                  	<li>
-						                  		<FacebookShareButton url={"http://localhost:7648/video" + video._id}>
+						                  		<FacebookShareButton url={`${import.meta.env.VITE_BACKEND_URL}/video" + ${video._id}`}>
 						                  			<FacebookIcon size={40} round={true}>Facebook</FacebookIcon>
 						                  		</FacebookShareButton>
 						                  	</li>
 						                  	<li>
-						                  		<RedditShareButton url={"http://localhost:7648/video" + video._id}>
+						                  		<RedditShareButton url={`${import.meta.env.VITE_BACKEND_URL}/video" + ${video._id}`}>
 						                  			<RedditIcon size={40} round={true}>Reddit</RedditIcon>
 						                  		</RedditShareButton>
 						                  	</li>
 						                  	<li>
-						                  		<TwitterShareButton url={"http://localhost:7648/video" + video._id}>
+						                  		<TwitterShareButton url={`${import.meta.env.VITE_BACKEND_URL}/video + ${video._id}`}>
 						                  			<TwitterIcon size={40} round={true}>Twitter</TwitterIcon>
 						                  		</TwitterShareButton>
 						                  	</li>

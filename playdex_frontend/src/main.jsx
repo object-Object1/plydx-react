@@ -17,7 +17,7 @@ import ThirdParty, {Github, Google, Facebook, Apple} from "supertokens-auth-reac
 SuperTokens.init({
     appInfo: {
         appName: "dex",
-        apiDomain: "http://localhost:7648",
+        apiDomain: `${import.meta.env.VITE_BACKEND_URL}`,
         websiteDomain: "http://localhost:10081",
         apiBasePath: "/auth",
         websiteBasePath: "/user"

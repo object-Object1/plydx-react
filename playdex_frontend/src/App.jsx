@@ -9,7 +9,7 @@ import Session from "supertokens-auth-react/recipe/session";
 SuperTokens.init({
     appInfo: {
         appName: "dex",
-        apiDomain: "http://localhost:7648",
+        apiDomain: `${import.meta.env.VITE_BACKEND_URL}`,
         websiteDomain: "http://localhost:10081",
         apiBasePath: "/auth",
         websiteBasePath: "/user"
@@ -59,7 +59,7 @@ function App() {
   useEffect(() => {
     axios({
       method: "GET",
-      url: "http://localhost:3000",
+      url: `${import.meta.env.VITE_BACKEND_URL}`,
     })
     .then(res => setData(prev => [...data, res.data]))
     .catch(err => console.log('got nothing', err.message))

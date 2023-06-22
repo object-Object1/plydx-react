@@ -59,7 +59,7 @@ function videoUploaderForm(){
 	useEffect(() => {
 		axios({
 			method: "GET",
-			url: "http://localhost:3037",
+			url: `${import.meta.env.VITE_BACKEND_URL}`,
 			withCredentials: true
 		})
 		.then(res => {
@@ -116,7 +116,7 @@ function videoUploaderForm(){
 		    	getDownloadURL(bucket).then(url => {
 				    axios({
 						method: "POST",
-						url: 'http://localhost:3037/video/add/',
+						url: `${import.meta.env.VITE_BACKEND_URL}/video/add/`,
 						params: {
 							uploaded_by: JSON.stringify({name:data.username, userId:data._id}),
 							title: title,

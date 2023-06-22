@@ -28,14 +28,14 @@ function userLogin(){
 		e.preventDefault()
 		axios({
 			method: "POST",
-			url: "http://localhost:3037/u/login/",
+			url: `${import.meta.env.VITE_BACKEND_URL}/u/login`,
 			params: {
 				email: email,
 				password: password
 			},
 			withCredentials: true
 
-		})
+		}).then((res) => console.log(console.log("response",res))).catch((e) => console.log("error", e))
 		// axios({method: "GET", data})
 		// .then(res => {return res.data})
 		// .then(data => {

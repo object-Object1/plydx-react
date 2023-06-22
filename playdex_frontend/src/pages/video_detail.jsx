@@ -24,7 +24,7 @@ function videoDetail(){
       }
     };
   const [loggedIn, setLoggedIn] = useState(false)
-  const [currentUser, setCurrentUser] = useState()
+  const [currentUser, setCurrentUser] = useState({})
 	const [keyStroke, setKeystroke] = useState("")
 	const [comments, setComment] = useState([])
 	const [lit, setLit] = useState(false)
@@ -38,25 +38,30 @@ function videoDetail(){
 	useEffect(() => {
 		axios({
 			method: "POST",
-			url: 'http://localhost:3037/video_data',
+			url: `${import.meta.env.VITE_BACKEND_URL}/video_data`,
 			withCredentials: true,
 			data: {
 				videoId: params.videoId
 			}
 		})
 		.then(videoObj => {
+			console.log("video object", videoObj)
 			setVideoFile(videoObj.data.video)
 			setCurrentUser(videoObj.data.user)
 			setCommentCount(videoObj.data.video.comment.length)
 			setLitCount(videoObj.data.video.lits.length)
 		})
 		.then(() => {
-			(!currentUser)? void(0): setLoggedIn(!loggedIn)
 			setIsFetching(!isFetching)
-			console.log(currentUser)
 		})
 
 	}, [])
+
+	useEffect(() => {
+		(!currentUser)? void(0): setLoggedIn(true)
+		console.log("current user 1:", currentUser)
+	}, [currentUser])
+
 
 	const changeCommentState = (e) => {
 		setKeystroke(e.target.value)
@@ -70,7 +75,7 @@ function videoDetail(){
 		if(keyStroke.length > 1){
 			axios({
 				method: "POST",
-				url: 'http://localhost:3037/add_comment',
+				url: `${import.meta.env.VITE_BACKEND_URL}/add_comment`,
 				data: {
 					user: currentUser,
 					comment: keyStroke,
@@ -88,7 +93,7 @@ function videoDetail(){
 	function handleButton(id){
 		axios({
 			method: "POST",
-			url: "http://localhost:3037/lit",
+			url: `${import.meta.env.VITE_BACKEND_URL}/lit`,
 			data:{
 				user:currentUser,
 				videoId: id
@@ -175,7 +180,7 @@ function videoDetail(){
 					        <h2 className="text-xl bg-gray-900 rounded text-white px-3">{commentCount}</h2>
 					      </div>
 					      <input type="text" onChange={changeCommentState} className="bg-gray-100 px-4 py-[10px] text-sm" placeholder="Leave comment here"></input>
-					      {(!currentUser) ? <button className="px-4 bg-[#6902FF] text-white font-semibold py-[8px]"><Link to="/user/login">Done</Link></button> : <button className="px-4 bg-[#6902FF] text-white font-semibold py-[8px]" onClick={addComment}>Done</button>}
+					      {(!loggedIn) ? <button className="px-4 bg-[#6902FF] text-white font-semibold py-[8px]"><Link to="/user/login">Done</Link></button> : <button className="px-4 bg-[#6902FF] text-white font-semibold py-[8px]" onClick={addComment}>Done</button>}
 					      <div>
 					      	<ul className="space-y-7 mb-7">
 					          {video.comment.map(comment => {
